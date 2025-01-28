@@ -23,6 +23,6 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_LOCAL_TEMP: "${WORKSPACE:-$HOME}/.ansible/tmp"
-    ANSIBLE_REMOTE_TMP: /tmp
+    ANSIBLE_REMOTE_TMP: "${WORKSPACE:-$HOME}/.ansible/tmp"
 verifier:
   name: ansible
