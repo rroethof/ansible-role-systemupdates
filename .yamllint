@@ -1,0 +1,9 @@
+---
+extends: default
+
+rules:
+  line-length: disable
+
+ignore: |
+  .github/stale.yml
+  .github/ISSUE_TEMPLATE/config.yml

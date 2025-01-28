@@ -1,0 +1,5 @@
+---
+# handlers file for systemupdates
+
+- name: Check if reboot is required
+  ansible.builtin.include_tasks: handler_reboot_check.yml

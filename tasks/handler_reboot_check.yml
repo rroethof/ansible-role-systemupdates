@@ -1,0 +1,21 @@
+---
+- name: Check for reboot hint file on Debian-based systems
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: reboot_required_file
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Check if reboot is required on RedHat-based systems
+  ansible.builtin.command: needs-restarting -r
+  register: needs_restarting_result
+  failed_when: false
+  changed_when: false
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Reboot the server if required and enabled
+  ansible.builtin.reboot:
+    msg: "Rebooting server after updates as requested by systemupdates_reboot variable"
+  when:
+    - systemupdates_reboot | default(false)
+    - (reboot_required_file.stat.exists is defined and reboot_required_file.stat.exists) or
+      (needs_restarting_result.rc is defined and needs_restarting_result.rc != 0)

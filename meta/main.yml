@@ -1,0 +1,38 @@
+---
+galaxy_info:
+  author: Ronny Roethof
+  namespace: rroethof
+  role_name: systemupdates
+  description: Installs system package updates on Debian and RHEL-based Linux systems.
+
+  issue_tracker_url: https://github.com/rroethof/ansible-role-systemupdates/issues
+
+  license: MIT
+
+  min_ansible_version: '2.12'
+
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+    - name: EL
+      versions:
+        - '8'
+        - '9'
+
+  galaxy_tags:
+    - system
+    - updates
+    - patching
+    - security
+    - debian
+    - ubuntu
+    - redhat
+    - rocky
+    - almalinux
+
+dependencies: []
