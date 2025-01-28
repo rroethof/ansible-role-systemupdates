@@ -4,7 +4,7 @@ galaxy_info:
   namespace: rroethof
   role_name: systemupdates
   description: Manages updates on Linux systems
-  
+
   issue_tracker_url: https://github.com/rroethof/ansible-role-systemupdates/issues
 
   license: MIT

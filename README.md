@@ -1,4 +1,4 @@
-# Ansible Role: Template
+# Ansible Role: System Updates
 
 [![CI](https://github.com/rroethof/ansible-role-systemupdates/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/rroethof/ansible-role-systemupdates/actions/workflows/ci.yml)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
