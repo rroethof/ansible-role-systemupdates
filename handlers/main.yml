@@ -1,7 +1,7 @@
 ---
 # handlers file for systemupdates
 - name: Reboot the server if required
-  reboot:
+  ansible.builtin.reboot:
     msg: "Reboot initiated by Ansible for kernel updates."
     connect_timeout: 5
     reboot_timeout: 600

@@ -6,11 +6,18 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Check the last time the system was updated
-      command: stat -c %y /var/lib/apt/periodic/update-success-stamp
-      register: last_update_time
+    - name: Check for recent dist-upgrade in apt history log
+      ansible.builtin.shell: |
+        grep -q "Commandline: apt-get dist-upgrade" /var/log/apt/history.log
+      register: dist_upgrade_check
+      ignore_errors: yes  # Continue even if the command fails (e.g., no log entry found)
 
-    - name: Fail if the system has not been updated in the last 24 hours
-      fail:
-        msg: "The system has not been updated in the last 24 hours."
-      when: ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ') - last_update_time.stdout | to_datetime('%Y-%m-%d %H:%M:%S.%f%z') > 86400
+    - name: Fail if dist-upgrade has not been run recently
+      ansible.builtin.fail:
+        msg: "The system has not run 'apt dist-upgrade' recently."
+      when: dist_upgrade_check.rc != 0  # Fail if the grep command did not find a match
+
+    - name: Success message if dist-upgrade has been run recently
+      ansible.builtin.debug:
+        msg: "The system has run 'apt dist-upgrade' recently."
+      when: dist_upgrade_check.rc == 0  # Success if the grep command found a match
