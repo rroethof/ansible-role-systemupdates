@@ -6,6 +6,11 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Example assertion
-      ansible.builtin.assert:
-        that: true
+    - name: Check the last time the system was updated
+      command: stat -c %y /var/lib/apt/periodic/update-success-stamp
+      register: last_update_time
+
+    - name: Fail if the system has not been updated in the last 24 hours
+      fail:
+        msg: "The system has not been updated in the last 24 hours."
+      when: ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ') - last_update_time.stdout | to_datetime('%Y-%m-%d %H:%M:%S.%f%z') > 86400
