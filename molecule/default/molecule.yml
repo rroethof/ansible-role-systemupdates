@@ -3,7 +3,7 @@ role_name_check: 1
 dependency:
   name: galaxy
   options:
-    ignore-errors: true  
+    ignore-errors: true
 driver:
   name: docker
 lint: |
@@ -21,5 +21,8 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_LOCAL_TEMP: "${WORKSPACE:-$HOME}/.ansible/tmp"
+    ANSIBLE_REMOTE_TMP: /tmp
 verifier:
   name: ansible

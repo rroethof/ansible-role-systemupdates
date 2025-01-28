@@ -40,9 +40,7 @@ jobs:
         distro:
           - rockylinux9
           - ubuntu2204
-          - ubuntu2004
           - debian12
-          - debian11
 
     steps:
       - name: Check out the codebase.
