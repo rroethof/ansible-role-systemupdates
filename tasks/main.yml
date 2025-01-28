@@ -1,2 +1,30 @@
 ---
 # tasks file for systemupdates
+- name: Update and upgrade a Debian server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt package list
+      apt:
+        update_cache: yes
+      tags: update
+
+    - name: Upgrade all installed packages
+      apt:
+        upgrade: dist
+      tags: upgrade
+
+    - name: Perform a distribution upgrade (handle dependencies)
+      apt:
+        upgrade: dist
+      tags: dist-upgrade
+
+    - name: Remove unnecessary packages
+      apt:
+        autoremove: yes
+      tags: autoremove
+
+    - name: Clean up local repository of retrieved package files
+      apt:
+        autoclean: yes
+      tags: autoclean
