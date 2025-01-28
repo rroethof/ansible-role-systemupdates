@@ -1,32 +1,30 @@
 ---
 # tasks file for systemupdates
-- name: Update and upgrade a Debian server
-  hosts: all
-  become: yes
-  tasks:
-    - name: Update apt package list
-      apt:
-        update_cache: yes
-      tags: update
+- name: Update apt package list
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    update_cache: yes
+  tags: update
 
-    - name: Upgrade all installed packages
-      apt:
-        upgrade: dist
-      tags: upgrade
-      notify: Reboot the server if required
+- name: Upgrade all installed packages
+  ansible.builtin.apt:
+    upgrade: dist
+  tags: upgrade
+  notify: Reboot the server if required
 
-    - name: Perform a distribution upgrade (handle dependencies)
-      apt:
-        upgrade: dist
-      tags: dist-upgrade
-      notify: Reboot the server if required
+- name: Perform a distribution upgrade (handle dependencies)
+  ansible.builtin.apt:
+    upgrade: dist
+  tags: dist-upgrade
+  notify: Reboot the server if required
 
-    - name: Remove unnecessary packages
-      apt:
-        autoremove: yes
-      tags: autoremove
+- name: Remove unnecessary packages
+  ansible.builtin.apt:
+    autoremove: yes
+  tags: autoremove
 
-    - name: Clean up local repository of retrieved package files
-      apt:
-        autoclean: yes
-      tags: autoclean
+- name: Clean up local repository of retrieved package files
+  ansible.builtin.apt:
+    autoclean: yes
+  tags: autoclean
