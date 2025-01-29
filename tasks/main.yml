@@ -20,10 +20,10 @@
 
 - name: Remove unnecessary packages
   ansible.builtin.apt:
-    autoremove: yes
+    autoremove: true
   tags: autoremove
 
 - name: Clean up local repository of retrieved package files
   ansible.builtin.apt:
-    autoclean: yes
+    autoclean: true
   tags: autoclean

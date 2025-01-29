@@ -6,7 +6,7 @@ name: CI
     branches:
   schedule:
     - cron: '3 2 2 * *'
-    
+
 defaults:
   run:
     working-directory: 'rroethof.systemupdates'
