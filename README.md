@@ -1,7 +1,11 @@
 # Ansible Role: System Updates
 
-[![CI](https://github.com/rroethof/ansible-role-systemupdates/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/rroethof/ansible-role-systemupdates/actions/workflows/ci.yml)
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![CI](https://github.com/rroethof/ansible-role-systemupdates/actions/workflows/ci.yml/badge.svg)](https://github.com/rroethof/ansible-role-systemupdates/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![github](https://img.shields.io/badge/GitHub-rroethof-181717.svg?style=flat&logo=github)](https://github.com/rroethof)
+[![twitter](https://img.shields.io/badge/Twitter-@rroethof-00aced.svg?style=flat&logo=twitter)](https://twitter.com/rroethof)
+[![website](https://img.shields.io/badge/Website-RonnyRoethof-5087B2.svg?style=flat&logo=telegram)](https://ronnyroethof.nl)
+
 
 Ensures that servers are uptodate.
 
@@ -63,4 +67,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2025 by [Ronny Roethof](https://www.ronnyroethof.nl).
+This role was created in 2025 by [Ronny Roethof](https://ronnyroethof.nl).
