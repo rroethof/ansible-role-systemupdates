@@ -10,13 +10,11 @@
   ansible.builtin.apt:
     upgrade: dist
   tags: upgrade
-  notify: Reboot the server if required
 
 - name: Perform a distribution upgrade (handle dependencies)
   ansible.builtin.apt:
     upgrade: dist
   tags: dist-upgrade
-  notify: Reboot the server if required
 
 - name: Remove unnecessary packages
   ansible.builtin.apt:
