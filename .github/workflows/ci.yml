@@ -82,7 +82,7 @@ jobs:
   galaxy:
     name: Import to Galaxy
     needs: [lint, molecule]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
