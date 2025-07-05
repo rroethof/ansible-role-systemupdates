@@ -38,3 +38,14 @@ systemupdates_bugfix: true
 
 # If yes, run autoremove for the respective package manager after updates.
 systemupdates_autoremove: true
+
+# --- Telegram Notification Settings ---
+
+# If yes, send a Telegram notification after the role completes.
+systemupdates_telegram_notification: false
+
+# The API token for your Telegram bot.
+systemupdates_telegram_api_token: ""
+
+# The chat ID to send the notification to.
+systemupdates_telegram_chat_id: ""

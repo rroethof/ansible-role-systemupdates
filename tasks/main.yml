@@ -1,10 +1,6 @@
 ---
 # tasks file for systemupdates
 
-- name: "Check if role is enabled"
-  ansible.builtin.meta: end_play
-  when: not (systemupdates_enabled | default(true))
-
 - name: "Ensure role is run serially to protect clustered services"
   ansible.builtin.fail:
     msg: |
@@ -19,62 +15,18 @@
     - systemupdates_enforce_serial_execution | default(true)
     - (ansible_play_batch | length) > 1
 
-- name: "Gather facts"
-  ansible.builtin.setup:
-
-# Debian/Ubuntu systems
-- name: Manage Debian family updates
-  when: ansible_facts['os_family'] == 'Debian'
-  become: true
+- name: Run role tasks only if systemupdates_enabled is true
+  when: systemupdates_enabled | bool
   block:
-    - name: DEB - Update apt packages
-      ansible.builtin.apt:
-        upgrade: "{{ systemupdates_upgrade_type | default('dist') }}"
-        update_cache: true
-        cache_valid_time: "{{ systemupdates_cache_valid_time | default(3600) }}"
-        only_upgrade: "{{ systemupdates_only_upgrade | default(false) }}"
-        autoclean: "{{ systemupdates_autoclean | default(true) }}"
-      register: apt_update_status
-      notify: "Check if reboot is required"
+    - name: Include OS-specific update tasks
+      ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
 
-    - name: DEB - Run autoremove for apt
-      ansible.builtin.apt:
-        autoremove: true
-      when:
-        - apt_update_status.changed
-        - systemupdates_autoremove | default(true)
-  rescue:
-    - name: DEB - Log Debian family update failure
-      ansible.builtin.debug:
-        msg: "Failed to update Debian system: {{ ansible_failed_task.name }}"
+    - name: Check if a reboot is required
+      ansible.builtin.include_tasks: handler_reboot_check.yml
 
-# RedHat/CentOS/Fedora systems
-- name: Manage RedHat family updates
-  when: ansible_facts['os_family'] == 'RedHat'
-  become: true
-  block:
-    - name: RHEL - Ensure dnf-utils is installed (for needs-restarting)
-      ansible.builtin.dnf:
-        name: dnf-utils
-        state: present
-
-    - name: RHEL - Update dnf packages  # noqa: package-latest
-      ansible.builtin.dnf:
-        name: "*"
-        state: latest
-        update_cache: true
-        security: "{{ systemupdates_security_only | default(false) }}"
-        bugfix: "{{ systemupdates_bugfix | default(true) }}"
-      register: dnf_update_status
-      notify: "Check if reboot is required"
-
-    - name: RHEL - Run autoremove for dnf
-      ansible.builtin.dnf:
-        autoremove: true
-      when:
-        - dnf_update_status.changed
-        - systemupdates_autoremove | default(true)
-  rescue:
-    - name: RHEL - Log RedHat family update failure
-      ansible.builtin.debug:
-        msg: "Failed to update RedHat system: {{ ansible_failed_task.name }}"
+- name: Trigger completion handlers
+  ansible.builtin.meta: noop
+  notify:
+    - Send Telegram notification
+    - Check if reboot is required
+  when: systemupdates_enabled | bool
