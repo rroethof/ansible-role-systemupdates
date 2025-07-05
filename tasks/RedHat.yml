@@ -10,6 +10,6 @@
     update_cache: true
 
 - name: "RedHat | Autoremove unused packages"
-  ansible.builtin.dnf s:
+  ansible.builtin.dnf:
     autoremove: true
   when: systemupdates_autoremove | bool
