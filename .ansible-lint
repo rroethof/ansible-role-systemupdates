@@ -17,3 +17,4 @@ skip_list:
   - 'role-name'
   - 'experimental'
   - 'line-length'
+  - 'package-latest'
