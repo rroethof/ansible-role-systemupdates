@@ -2,33 +2,39 @@
 galaxy_info:
   author: Ronny Roethof <ronny@roethof.net>
   namespace: rroethof
-  role_name: ansibletemplate
-  description: A template for creating new Ansible roles
+  role_name: systemupdates
+  description: Installs system package updates on Debian and RHEL-based Linux systems.
 
-  issue_tracker_url: https://github.com/rroethof/template-ansible-role/issues
+  issue_tracker_url: https://github.com/rroethof/ansible-role-systemupdates/issues
 
   license: MIT
 
-  min_ansible_version: "2.10"
+  min_ansible_version: '2.12'
 
   platforms:
     - name: Debian
       versions:
-        - bookworm    # Debian 12
-        - trixie      # Debian 13
+        - bookworm
+        - trixie
     - name: Ubuntu
       versions:
-        - jammy       # 22.04 LTS
-        - noble       # 24.04 LTS
+        - focal
+        - jammy
     - name: EL
       versions:
-        - "9"         # RHEL/Rocky 9
+        - '8'
+        - '9'
 
   galaxy_tags:
-    - template
-    - ansible
-    - role
-    - example
-    - linux
+    - system
+    - updates
+    - patching
+    - security
+    - debian
+    - ubuntu
+    - redhat
+    - rocky
+    - almalinux
 
-dependencies: []
+dependencies:
+  - community.general

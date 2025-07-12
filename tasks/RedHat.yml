@@ -1,0 +1,15 @@
+---
+# tasks/RedHat.yml
+
+- name: "RedHat | Perform system upgrade"
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest
+    security: "{{ systemupdates_security_only | bool }}"
+    bugfix: "{{ systemupdates_bugfix | bool if ansible_pkg_mgr == 'dnf' else omit }}"
+    update_cache: true
+
+- name: "RedHat | Autoremove unused packages"
+  ansible.builtin.dnf:
+    autoremove: true
+  when: systemupdates_autoremove | bool

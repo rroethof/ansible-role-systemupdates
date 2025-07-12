@@ -1,2 +1,32 @@
 ---
-# tasks file for ansibletemplate
+# tasks file for systemupdates
+
+- name: "Ensure role is run serially to protect clustered services"
+  ansible.builtin.fail:
+    msg: |
+      The 'systemupdates' role is configured to enforce serial execution
+      to prevent simultaneous reboots in a cluster.
+      This play is attempting to run on {{ ansible_play_batch | length }} host(s)
+      concurrently in this batch: {{ ansible_play_batch }}.
+      Please set 'serial: 1' in your playbook for the play targeting these hosts.
+      To disable this check (not recommended for quorum-based clusters),
+      set 'systemupdates_enforce_serial_execution: false' when calling the role.
+  when:
+    - systemupdates_enforce_serial_execution | default(true)
+    - (ansible_play_batch | length) > 1
+
+- name: Run role tasks only if systemupdates_enabled is true
+  when: systemupdates_enabled | bool
+  block:
+    - name: Include OS-specific update tasks
+      ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
+
+    - name: Check if a reboot is required
+      ansible.builtin.include_tasks: handler_reboot_check.yml
+
+- name: Trigger completion handlers
+  ansible.builtin.meta: noop
+  notify:
+    - Send Telegram notification
+    - Check if reboot is required
+  when: systemupdates_enabled | bool

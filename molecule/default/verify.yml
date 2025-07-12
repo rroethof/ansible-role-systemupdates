@@ -1,11 +1,42 @@
 ---
-# This is an example playbook to execute Ansible tests.
+# Verify that system updates have been applied
 
 - name: Verify
   hosts: all
   become: true
-  gather_facts: false
+  gather_facts: true
   tasks:
-    - name: Example assertion
+    - name: Check if Debian system is updated
+      ansible.builtin.shell: |
+        set -o pipefail
+        apt-get -s upgrade | grep -c '^Inst' || test $? -eq 1
+      args:
+        executable: /bin/bash
+      register: updates_available
+      changed_when: false
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Verify no updates are available (Debian)
       ansible.builtin.assert:
-        that: true
+        that: updates_available.stdout | int == 0
+        fail_msg: "System updates are still available"
+        success_msg: "System is up to date"
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Check if RedHat system is updated
+      ansible.builtin.shell: |
+        set -o pipefail
+        dnf check-update -q | grep -v '^$' | grep -vc '^Last metadata' || test $? -eq 1
+      args:
+        executable: /bin/bash
+      register: dnf_updates
+      changed_when: false
+      failed_when: dnf_updates.rc not in [0, 100]
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Verify no updates are available (RedHat)
+      ansible.builtin.assert:
+        that: dnf_updates.stdout | int == 0
+        fail_msg: "System updates are still available"
+        success_msg: "System is up to date"
+      when: ansible_facts['os_family'] == 'RedHat'

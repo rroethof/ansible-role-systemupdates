@@ -1,2 +1,51 @@
 ---
-# defaults file for ansibletemplate
+# defaults file for systemupdates
+
+# A master switch to enable or disable the entire role.
+systemupdates_enabled: true
+
+# Whether to reboot the server if a reboot is required after updates.
+# This is checked by the 'Check if reboot is required' handler.
+systemupdates_reboot: false
+
+# Whether to enforce that the role runs on only one host at a time.
+# Recommended for clustered services to prevent simultaneous reboots.
+systemupdates_enforce_serial_execution: true
+
+# --- Debian/Ubuntu specific variables ---
+
+# The type of upgrade to perform. 'dist' is equivalent to 'dist-upgrade'.
+systemupdates_upgrade_type: "dist"
+
+# The time in seconds that the apt cache is considered valid.
+systemupdates_cache_valid_time: 3600
+
+# If yes, only upgrade the packages specified via the 'package' parameter.
+systemupdates_only_upgrade: false
+
+# If yes, run 'apt-get autoclean' after updates.
+systemupdates_autoclean: true
+
+# --- RedHat/CentOS/Fedora specific variables ---
+
+# If yes, only install security-related updates.
+systemupdates_security_only: false
+
+# If yes, also install bugfix-related updates (used with dnf).
+systemupdates_bugfix: true
+
+# --- General variables ---
+
+# If yes, run autoremove for the respective package manager after updates.
+systemupdates_autoremove: true
+
+# --- Telegram Notification Settings ---
+
+# If yes, send a Telegram notification after the role completes.
+systemupdates_telegram_notification: false
+
+# The API token for your Telegram bot.
+systemupdates_telegram_api_token: ""
+
+# The chat ID to send the notification to.
+systemupdates_telegram_chat_id: ""

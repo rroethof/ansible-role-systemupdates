@@ -1,0 +1,34 @@
+---
+# tasks/Debian.yml
+
+- name: "Debian | Update apt cache if needed"
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ systemupdates_cache_valid_time }}"
+  register: apt_cache_result
+  changed_when: apt_cache_result.cache_updated
+
+- name: "Debian | Perform a full system upgrade"
+  ansible.builtin.apt:
+    upgrade: "{{ systemupdates_upgrade_type }}"
+  when: not systemupdates_only_upgrade | bool
+
+- name: "Debian | Upgrade only specified packages"
+  ansible.builtin.apt:
+    name: "{{ systemupdates_packages | default([]) }}"
+    state: latest
+    only_upgrade: true
+  when:
+    - systemupdates_only_upgrade | bool
+    - systemupdates_packages is defined
+    - systemupdates_packages | length > 0
+
+- name: "Debian | Remove unused packages"
+  ansible.builtin.apt:
+    autoremove: true
+  when: systemupdates_autoremove | bool
+
+- name: "Debian | Clean up downloaded package files"
+  ansible.builtin.apt:
+    autoclean: true
+  when: systemupdates_autoclean | bool

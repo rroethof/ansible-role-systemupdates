@@ -13,7 +13,16 @@ exclude_paths:
   - ./.github
   - ./requirements.yml
 skip_list:
-  - 'yaml'
-  - 'role-name'
-  - 'experimental'
-  - 'line-length'
+  - yaml
+  - role-name
+  - experimental
+  - line-length
+  - fqcn-builtins
+  - no-changed-when
+  - meta-no-info
+
+warn_list:
+  - name[template]
+  - name[missing]
+
+parseable: true

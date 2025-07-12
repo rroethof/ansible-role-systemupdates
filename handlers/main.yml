@@ -1,2 +1,33 @@
 ---
-# handlers file for ansibletemplate
+# handlers file for systemupdates
+
+# Handler: Reboot server if required (supports Debian and RedHat)
+- name: Reboot server if required
+  ansible.builtin.reboot:
+    msg: "Rebooting server to apply updates."
+  listen: Check if reboot is required
+  when:
+    - systemupdates_reboot | bool
+    - >
+      (systemupdates_reboot_required_file is defined and systemupdates_reboot_required_file.stat.exists) or
+      (needs_restarting_result is defined and needs_restarting_result.rc != 0)
+
+# Handler: Send Telegram notification after updates
+- name: Send Telegram notification via Telegram
+  community.general.telegram:
+    token: "{{ systemupdates_telegram_api_token }}"
+    chat_id: "{{ systemupdates_telegram_chat_id }}"
+    msg: "✅ Systeemupdates op {{ inventory_hostname }} voltooid.\nStatus: {{ reboot_status_msg }}"
+  delegate_to: localhost
+  failed_when: false
+  listen: Send Telegram notification
+  when:
+    - systemupdates_telegram_notification | bool
+    - systemupdates_telegram_api_token | length > 0
+    - systemupdates_telegram_chat_id | length > 0
+  vars:
+    reboot_status_msg: >-
+      {{ 'Een herstart is vereist.' if
+         ((systemupdates_reboot_required_file is defined and systemupdates_reboot_required_file.stat.exists)
+         or (needs_restarting_result is defined and needs_restarting_result.rc != 0))
+         else 'Geen herstart vereist.' }}
