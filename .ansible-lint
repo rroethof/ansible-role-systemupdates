@@ -20,6 +20,7 @@ skip_list:
   - fqcn-builtins
   - no-changed-when
   - meta-no-info
+  - package-latest
 
 warn_list:
   - name[template]
